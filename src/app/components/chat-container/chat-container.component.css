@@ -1,10 +1,17 @@
 .chat-container
 {
       display: flex;
+
+
+      .chat-container__add-room{
+        position: fixed;
+        bottom: 4rem;
+        right: 4rem;
+      }
+
+      .chat-container__room-list{
+        width: 10rem;
+        margin-right: 2rem;
+      }
 }
 
-.chat-container__add-room{
-    position: fixed;
-    bottom: 4rem;
-    right: 4rem;
-  }
