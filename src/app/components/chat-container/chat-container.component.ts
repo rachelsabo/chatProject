@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { ChatService } from '../../services/chat.service';
+import { Observable } from 'rxjs';
+import { IChatRoom } from '../../models';
 
 @Component({
   selector: 'app-chat-container',
@@ -7,4 +10,9 @@ import { Component } from '@angular/core';
 })
 export class ChatContainerComponent {
 
+  public rooms$: Observable <Array<IChatRoom>>;
+
+  constructor(private chatService: ChatService){
+    this.rooms$ = this.chatService.getRooms();
+  }
 }

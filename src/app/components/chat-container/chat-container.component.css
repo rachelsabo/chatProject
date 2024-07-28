@@ -1,0 +1,10 @@
+.chat-container
+{
+      display: flex;
+}
+
+.chat-container__add-room{
+    position: fixed;
+    bottom: 4rem;
+    right: 4rem;
+  }
