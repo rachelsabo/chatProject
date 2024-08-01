@@ -49,4 +49,14 @@ export class ChatService {
           })
       }))
     }
+
+    public addRoom(roomName: string, userId: string):void
+    {
+      this._db.collection('rooms').add(
+        {
+          roomName,
+          createdUserId : userId,
+        }
+      )
+    }
 }

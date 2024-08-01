@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-room',
@@ -7,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class AddRoomComponent {
 
+  constructor(public dialogRef: MatDialogRef<AddRoomComponent>)
+  {
+    
+  }
+
+  public closeModal():void{
+    this.dialogRef.close();
+  }
 }

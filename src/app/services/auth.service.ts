@@ -60,6 +60,11 @@ export class AuthService {
     })
   }
 
+  public getUserData():Observable<User>
+  {
+    return this.userDetails$.asObservable();
+  }
+
   private authLogin(provider: firebase.default.auth.AuthProvider)
   {
     return this.afAuth.signInWithPopup(provider).then(res=>

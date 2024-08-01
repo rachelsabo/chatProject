@@ -3,6 +3,9 @@ import { ChatService } from '../../services/chat.service';
 import { filter, Observable, Subscription } from 'rxjs';
 import { IChatRoom, IMessage } from '../../models';
 import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddRoomComponent } from '../add-room/add-room.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-chat-container',
@@ -12,15 +15,23 @@ import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/rou
 export class ChatContainerComponent implements OnInit,OnDestroy{
 
   private subscription: Subscription = new Subscription();
+  private userId :string = '';
 
   public rooms$: Observable <Array<IChatRoom>>;
   public messages$: Observable <Array<IMessage>> ;
 
-  constructor(private chatService: ChatService, private router: Router, private activatedRoute: ActivatedRoute){
+  constructor(private chatService: ChatService, 
+              private router: Router,
+              private activatedRoute: ActivatedRoute,
+              public dialog: MatDialog,
+              private authService:AuthService){
+
     this.rooms$ = this.chatService.getRooms();
+    console.log('one',activatedRoute.snapshot.url[1].path )
 
     const roomId : string = activatedRoute.snapshot.url[1].path;
-
+    console.log('two',roomId )
+    
     this.messages$ = this.chatService.getRoomMessages(roomId);
 
     this.subscription.add(
@@ -37,8 +48,30 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
     )
   }
 
-  ngOnInit(): void {
+  public openAddRoomModal():void
+  {
     
+      const dialogRef = this.dialog.open(AddRoomComponent, {width:'250px'});
+ 
+      dialogRef.afterClosed().subscribe(result => {
+        this.onAddRoom(result,this.userId);}); 
+         
+  }
+
+  public onAddRoom(roomName: string, userId:string):void
+  {
+    this.chatService.addRoom(roomName, userId);
+  }
+
+
+  ngOnInit(): void {
+    this.subscription.add(
+      this.authService.getUserData().pipe(filter(data=>!!data)).subscribe(user=>
+      {
+        this.userId = user.uid;
+      }
+      )
+    )
   }
 
   ngOnDestroy(): void {
