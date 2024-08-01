@@ -16,9 +16,10 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
 
   private subscription: Subscription = new Subscription();
   private userId :string = '';
+  private roomId? :string;
 
   public rooms$: Observable <Array<IChatRoom>>;
-  public messages$: Observable <Array<IMessage>> ;
+  public messages$?: Observable <Array<IMessage>> ;
 
   constructor(private chatService: ChatService, 
               private router: Router,
@@ -27,13 +28,13 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
               private authService:AuthService){
 
     this.rooms$ = this.chatService.getRooms();
-    console.log('one',activatedRoute.snapshot.url[1].path )
 
-    const roomId : string = activatedRoute.snapshot.url[1].path;
-    console.log('two',roomId )
+    if(activatedRoute.snapshot.url.length>1)
+    {
+      this.roomId = activatedRoute.snapshot.url[1].path;
+      this.messages$ = this.chatService.getRoomMessages(this.roomId);
+    }
     
-    this.messages$ = this.chatService.getRoomMessages(roomId);
-
     this.subscription.add(
       router.events
       .pipe(filter((data)=>data instanceof NavigationEnd))
@@ -63,6 +64,12 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
     this.chatService.addRoom(roomName, userId);
   }
 
+
+  public onSendMessage(message:string) :void
+  {
+    if(this.roomId && this.userId)
+      this.chatService.sendMessage(this.userId,message,this.roomId)
+  }
 
   ngOnInit(): void {
     this.subscription.add(

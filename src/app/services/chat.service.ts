@@ -28,35 +28,42 @@ export class ChatService {
     }))
   }
 
-    public getRoomMessages(roomId: string): Observable<Array<IMessage>>
-    {
+  public getRoomMessages(roomId: string): Observable<Array<IMessage>>
+  {
 
-      return this._db
-      .collection('rooms')
-      .doc(roomId)
-      .collection('messages')
-      .snapshotChanges()
-      .pipe(map((messages)=>{
-        return messages.map((message)=>
-          {
-            const id = message.payload.doc.id;
-            const data:IMessage = <IMessage>message.payload.doc.data();
-
-            return {
-              ...data,
-              id,
-            };
-          })
-      }))
-    }
-
-    public addRoom(roomName: string, userId: string):void
-    {
-      this._db.collection('rooms').add(
+    return this._db
+    .collection('rooms')
+    .doc(roomId)
+    .collection('messages')
+    .snapshotChanges()
+    .pipe(map((messages)=>{
+      return messages.map((message)=>
         {
-          roomName,
-          createdUserId : userId,
-        }
-      )
-    }
+          const id = message.payload.doc.id;
+          const data:IMessage = <IMessage>message.payload.doc.data();
+
+          return {
+            ...data,
+            id,
+          };
+        })
+    }))
+  }
+
+  public addRoom(roomName: string, userId: string):void
+  {
+    this._db.collection('rooms').add(
+      {
+        roomName,
+        createdUserId : userId,
+      }
+    )
+  }
+  public sendMessage(userId:string, body:string, roomId:string):void{
+    this._db.collection('rooms').doc(roomId).collection('messages').add({
+      userId,
+      body,
+      timestamp: new Date().getTime(),
+    })
+  }
 }
