@@ -1,3 +1,11 @@
-.example-spacer {
+.header{
+  .example-spacer {
     flex: 1 1 auto;
   }
+  
+}
+.header__link{
+  padding: 10px;
+  color:blue;
+  text-decoration: none;
+}

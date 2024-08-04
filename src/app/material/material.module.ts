@@ -6,10 +6,11 @@ import {MatListModule} from '@angular/material/list';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 const modules:any = [MatToolbarModule,MatButtonModule,MatListModule,MatDialogModule,MatFormFieldModule
-  ,MatInputModule
+  ,MatInputModule,ScrollingModule
 ];
 
 @NgModule({
