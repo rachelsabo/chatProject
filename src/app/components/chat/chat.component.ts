@@ -7,19 +7,31 @@ import { IMessage } from '../../models';
   styleUrl: './chat.component.css'
 })
 export class ChatComponent  implements OnInit{
-  @Input()
-  messages: Array<IMessage> = [];
 
   @Output()
   onSendMessage:EventEmitter<string> = new EventEmitter();
+
+  @Input() set messages(messages:Array<IMessage>)
+  {
+    this._messages = messages.sort((x,y)=>
+    {return x.timestamp - y.timestamp;   
+    })
+  }
+
+  private _messages: Array<IMessage> = [];
+
+  get messages()
+  {
+    return this._messages;
+  }
 
   ngOnInit(): void {
     console.log(this.messages)
   }
 
-  public sendMessage(message:string) :void
+  public sendMessage(message:string, input:HTMLInputElement) :void
   {
-    console.log(message);
     this.onSendMessage.emit(message);
+    input.value = '';
   }
 }

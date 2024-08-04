@@ -1,12 +1,12 @@
 <div class="chat" *ngIf="messages">
     <div class="chat_messages">
         <div class="chat_message" *ngFor="let message of messages">
-            {{message | json}}
+            {{message.body}}
         </div>
     </div>
     <div class="chat_form">
         <input type="text" #newMessage><br/>
-        <button type="button" (click)="sendMessage(newMessage.value)">Send</button>
+        <button type="button" (click)="sendMessage(newMessage.value, newMessage)">Send</button>
 
     </div>
 </div>

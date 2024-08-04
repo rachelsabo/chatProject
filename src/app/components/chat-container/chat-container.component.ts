@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../../services/chat.service';
 import { filter, Observable, Subscription } from 'rxjs';
 import { IChatRoom, IMessage } from '../../models';
-import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { ActivatedRoute, ActivationEnd, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { AddRoomComponent } from '../add-room/add-room.component';
 import { AuthService } from '../../services/auth.service';
@@ -76,8 +76,15 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
       this.authService.getUserData().pipe(filter(data=>!!data)).subscribe(user=>
       {
         this.userId = user.uid;
-      }
-      )
+      }))
+
+    this.subscription.add(
+      this.router.events.pipe(filter((routerEvent)=> routerEvent instanceof ActivationEnd))
+      .subscribe((data)=>{
+        const routeEvent = data as ActivationEnd;
+        this.roomId = routeEvent.snapshot.paramMap.get('roomId') || '';
+        console.log(this.roomId)
+      })
     )
   }
 
