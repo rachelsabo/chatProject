@@ -22,7 +22,7 @@
               <mat-label>Your Message</mat-label>
               <input matInput #messageInput />
             </mat-form-field>
-            <button mat-fab (click)="sendMessage(messageInput.value)">
+            <button mat-fab (click)="sendMessage(messageInput.value,messageInput)">
               <mat-icon>send</mat-icon>
             </button>
           </div>

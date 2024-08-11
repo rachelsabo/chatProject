@@ -67,8 +67,12 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
 
   public onSendMessage(message:string) :void
   {
+    this.userId = this.authService.getUserId();
     if(this.roomId && this.userId)
-      this.chatService.sendMessage(this.userId,message,this.roomId)
+    {
+      this.chatService.sendMessage(this.userId,message,this.roomId);
+    }
+      
   }
 
   ngOnInit(): void {
@@ -83,7 +87,6 @@ export class ChatContainerComponent implements OnInit,OnDestroy{
       .subscribe((data)=>{
         const routeEvent = data as ActivationEnd;
         this.roomId = routeEvent.snapshot.paramMap.get('roomId') || '';
-        console.log(this.roomId)
       })
     )
   }

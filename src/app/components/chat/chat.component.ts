@@ -2,6 +2,8 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { IMessage } from '../../models';
+import { useAnimation } from '@angular/animations';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-chat',
@@ -9,6 +11,8 @@ import { IMessage } from '../../models';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+
+  public userId: string = '';
   @ViewChild(CdkVirtualScrollViewport) viewPort?: CdkVirtualScrollViewport;
 
   @Output() onSendMessage: EventEmitter<string> = new EventEmitter();
@@ -28,14 +32,14 @@ export class ChatComponent implements OnInit {
   get messages(): Array<IMessage> {
     return this._messages;
   }
-
-  @Input() userId: string = '';
-
   private _messages: Array<IMessage> = [];
 
-  constructor() {}
+  constructor(private authService:AuthService ) {
+    this.userId = authService.getUserId();
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   ngAfterViewInit() {
     if (this.viewPort) {
@@ -43,8 +47,8 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  public sendMessage(value: string) {
-    console.log(value);
+  public sendMessage(value: string, input:HTMLInputElement) {
     this.onSendMessage.emit(value);
+    input.value = '';
   }
 }

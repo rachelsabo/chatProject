@@ -13,7 +13,7 @@ export class AuthService {
 
   private isLoggedIn$ : BehaviorSubject<boolean> = new BehaviorSubject(false);
   private userDetails$ :Subject<User> = new Subject<User>();
-
+  private userId: string = "";
 
   constructor(private afs:AngularFirestore,
               private afAuth:AngularFireAuth,
@@ -31,6 +31,7 @@ export class AuthService {
           this.userDetails$.next(<User>user);
           const userString = JSON.stringify(user);
           localStorage.setItem('user',userString);
+          this.userId = user.uid;
           this.isLoggedIn$.next(true);
         }
         else
@@ -63,6 +64,10 @@ export class AuthService {
   public getUserData():Observable<User>
   {
     return this.userDetails$.asObservable();
+  }
+
+  public getUserId():string{
+    return this.userId;
   }
 
   private authLogin(provider: firebase.default.auth.AuthProvider)
